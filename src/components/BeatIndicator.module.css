@@ -1,0 +1,31 @@
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3rem;
+}
+
+.dot {
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background: var(--surface-raised);
+  transition:
+    background 80ms ease-out,
+    transform 80ms ease-out;
+}
+
+.accent {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.active {
+  background: var(--accent);
+  transform: scale(1.35);
+}
+
+.accent.active {
+  background: var(--accent-strong);
+}

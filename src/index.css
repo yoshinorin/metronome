@@ -1,0 +1,49 @@
+:root {
+  color-scheme: dark;
+  --bg: #14161a;
+  --surface: #1e2128;
+  --surface-raised: #343945;
+  --text: #e8eaed;
+  --muted: #9aa0a6;
+  --accent: #4fc3f7;
+  --accent-dim: #1b3a4a;
+  --accent-strong: #ffb74d;
+
+  font-family: system-ui, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif;
+  line-height: 1.5;
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  width: 100%;
+  max-width: 28rem;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+/* fieldset/legend are used as semantic grouping only; strip their default chrome */
+fieldset {
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+legend {
+  padding: 0;
+}

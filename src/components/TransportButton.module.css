@@ -1,0 +1,25 @@
+.button {
+  min-height: 3.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: filter 120ms ease-out;
+}
+
+.button:hover {
+  filter: brightness(1.1);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.playing {
+  background: var(--accent-strong);
+}
