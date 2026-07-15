@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MetronomeEngine } from '../audio/engine';
 import { clampBpm } from '../audio/timing';
+import { clampVolume, VOLUME_DEFAULT } from '../audio/volume';
 import { BPM_DEFAULT, TIME_SIGNATURES, type TimeSignature } from '../types';
 
 export interface MetronomeState {
@@ -9,8 +10,11 @@ export interface MetronomeState {
   isPlaying: boolean;
   /** Zero-indexed current beat, or null while stopped. */
   currentBeat: number | null;
+  /** Master volume, 0-100. */
+  volume: number;
   setBpm: (bpm: number) => void;
   setTimeSignature: (timeSignature: TimeSignature) => void;
+  setVolume: (volume: number) => void;
   toggle: () => Promise<void>;
 }
 
@@ -20,6 +24,7 @@ export function useMetronome(): MetronomeState {
   const [timeSignature, setTimeSignatureState] = useState<TimeSignature>(TIME_SIGNATURES[2]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentBeat, setCurrentBeat] = useState<number | null>(null);
+  const [volume, setVolumeState] = useState(VOLUME_DEFAULT);
   const engineRef = useRef<MetronomeEngine | null>(null);
 
   const getEngine = useCallback(() => {
@@ -36,9 +41,10 @@ export function useMetronome(): MetronomeState {
     }
     const engine = getEngine();
     engine.setTimeSignature(timeSignature);
+    engine.setVolume(volume);
     await engine.start(bpm);
     setIsPlaying(true);
-  }, [isPlaying, bpm, timeSignature, getEngine]);
+  }, [isPlaying, bpm, timeSignature, volume, getEngine]);
 
   const setBpm = useCallback((value: number) => {
     const next = clampBpm(value);
@@ -51,6 +57,12 @@ export function useMetronome(): MetronomeState {
     engineRef.current?.setTimeSignature(next);
   }, []);
 
+  const setVolume = useCallback((value: number) => {
+    const next = clampVolume(value);
+    setVolumeState(next);
+    engineRef.current?.setVolume(next);
+  }, []);
+
   // Release audio resources when the component unmounts.
   useEffect(() => {
     return () => {
@@ -59,5 +71,15 @@ export function useMetronome(): MetronomeState {
     };
   }, []);
 
-  return { bpm, timeSignature, isPlaying, currentBeat, setBpm, setTimeSignature, toggle };
+  return {
+    bpm,
+    timeSignature,
+    isPlaying,
+    currentBeat,
+    volume,
+    setBpm,
+    setTimeSignature,
+    setVolume,
+    toggle,
+  };
 }

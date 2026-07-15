@@ -47,3 +47,17 @@ fieldset {
 legend {
   padding: 0;
 }
+
+/* Touch devices: every tap target gets at least ~44px height */
+@media (pointer: coarse) {
+  button {
+    min-height: 2.75rem;
+  }
+}
+
+/* Tall desktop viewports: center the app vertically */
+@media (min-width: 640px) and (min-height: 700px) {
+  body {
+    align-items: center;
+  }
+}

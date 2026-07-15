@@ -8,6 +8,7 @@ export const ja: Dictionary = {
   tempo: 'テンポ',
   bpmUnit: 'BPM',
   timeSignature: '拍子',
+  volume: '音量',
   beatIndicator: '拍インジケーター',
   languageSwitch: '言語',
 };

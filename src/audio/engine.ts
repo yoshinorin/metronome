@@ -2,6 +2,7 @@ import * as Tone from 'tone';
 import { TIME_SIGNATURES, type TimeSignature } from '../types';
 import { ACCENT_FREQUENCY, CLICK_DURATION, CLICK_FREQUENCY, createClickSynth } from './sounds';
 import { beatSubdivision, isAccentedBeat } from './timing';
+import { volumeToDecibels } from './volume';
 
 /** Called on every beat, on the UI thread, with the zero-indexed beat number. */
 export type BeatCallback = (beat: number) => void;
@@ -41,6 +42,11 @@ export class MetronomeEngine {
 
   setBpm(bpm: number): void {
     Tone.getTransport().bpm.value = bpm;
+  }
+
+  /** Set the master output volume from a 0-100 percentage. */
+  setVolume(percent: number): void {
+    Tone.getDestination().volume.value = volumeToDecibels(percent);
   }
 
   /**

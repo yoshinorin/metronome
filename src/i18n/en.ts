@@ -6,6 +6,7 @@ export const en = {
   tempo: 'Tempo',
   bpmUnit: 'BPM',
   timeSignature: 'Time signature',
+  volume: 'Volume',
   beatIndicator: 'Beat indicator',
   languageSwitch: 'Language',
 };

@@ -8,7 +8,9 @@ A precise metronome that runs in your browser. Built with React and the Web Audi
 - Tempo control from 1 to 999 BPM (slider + numeric input)
 - Time signatures: 2/4, 3/4, 4/4, 6/8 (compound-meter accents in 6/8)
 - Accented first beat and visual beat indicator
+- Master volume control
 - UI in English and Japanese (auto-detected, switchable)
+- Responsive layout for mobile and desktop
 
 ## Development
 
