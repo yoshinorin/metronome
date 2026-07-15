@@ -43,12 +43,20 @@ export class MetronomeEngine {
     Tone.getTransport().bpm.value = bpm;
   }
 
-  /** Change the time signature. While playing, the measure restarts on beat one. */
+  /**
+   * Change the time signature. While playing, the transport is restarted so the
+   * new measure begins on beat one immediately. Re-scheduling on a running
+   * transport would leave a silent gap until the next grid boundary (up to one
+   * full beat — many seconds at low BPM), which reads as the metronome stopping.
+   */
   setTimeSignature(timeSignature: TimeSignature): void {
     this.timeSignature = timeSignature;
     if (this.eventId !== null) {
+      const transport = Tone.getTransport();
+      transport.stop();
       this.clearSchedule();
       this.scheduleClicks();
+      transport.start();
     }
   }
 
