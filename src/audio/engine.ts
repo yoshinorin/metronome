@@ -1,7 +1,14 @@
 import * as Tone from 'tone';
 import { TIME_SIGNATURES, type TimeSignature } from '../types';
 import { BEAT_LEVEL_MAX, beatLevelToVelocity, defaultBeatLevels } from './beatLevels';
-import { ACCENT_FREQUENCY, CLICK_DURATION, CLICK_FREQUENCY, createClickSynth } from './sounds';
+import {
+  ACCENT_FREQUENCY,
+  CLICK_DURATION,
+  CLICK_FREQUENCY,
+  createClickSynth,
+  DEFAULT_SOUND_ID,
+  type SoundId,
+} from './sounds';
 import { beatSubdivision, isAccentedBeat } from './timing';
 import { volumeToDecibels } from './volume';
 
@@ -22,6 +29,7 @@ export class MetronomeEngine {
   private timeSignature: TimeSignature = TIME_SIGNATURES[2];
   private beatLevels: number[] = defaultBeatLevels(TIME_SIGNATURES[2].beats);
   private accentEnabled = true;
+  private soundId: SoundId = DEFAULT_SOUND_ID;
   private readonly onBeat: BeatCallback;
 
   constructor(onBeat: BeatCallback) {
@@ -31,7 +39,7 @@ export class MetronomeEngine {
   /** Start playback. Must be called from a user gesture (browser autoplay policy). */
   async start(bpm: number): Promise<void> {
     await Tone.start();
-    this.synth ??= createClickSynth();
+    this.synth ??= createClickSynth(this.soundId);
     const transport = Tone.getTransport();
     transport.bpm.value = bpm;
     this.scheduleClicks();
@@ -60,6 +68,15 @@ export class MetronomeEngine {
   /** Enable or disable the accent (pitch emphasis on accented beats). */
   setAccentEnabled(enabled: boolean): void {
     this.accentEnabled = enabled;
+  }
+
+  /** Switch the click timbre. Rebuilds the synth immediately if one already exists. */
+  setSound(soundId: SoundId): void {
+    this.soundId = soundId;
+    if (this.synth) {
+      this.synth.dispose();
+      this.synth = createClickSynth(soundId);
+    }
   }
 
   /**

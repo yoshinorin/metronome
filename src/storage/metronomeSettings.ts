@@ -1,4 +1,5 @@
 import { defaultBeatLevels } from '../audio/beatLevels';
+import { DEFAULT_SOUND_ID, isSoundId, type SoundId } from '../audio/sounds';
 import { clampBpm } from '../audio/timing';
 import { clampVolume, VOLUME_DEFAULT } from '../audio/volume';
 import { BPM_DEFAULT, TIME_SIGNATURES, type TimeSignature } from '../types';
@@ -11,6 +12,7 @@ export interface StoredMetronomeSettings {
   volume: number;
   beatLevels: number[];
   accentEnabled: boolean;
+  sound: SoundId;
 }
 
 function isTimeSignature(value: unknown): value is TimeSignature {
@@ -30,6 +32,7 @@ function defaultSettings(): StoredMetronomeSettings {
     volume: VOLUME_DEFAULT,
     beatLevels: defaultBeatLevels(timeSignature.beats),
     accentEnabled: true,
+    sound: DEFAULT_SOUND_ID,
   };
 }
 
@@ -62,6 +65,7 @@ export function loadMetronomeSettings(): StoredMetronomeSettings {
       beatLevels,
       accentEnabled:
         typeof parsed.accentEnabled === 'boolean' ? parsed.accentEnabled : fallback.accentEnabled,
+      sound: isSoundId(parsed.sound) ? parsed.sound : fallback.sound,
     };
   } catch {
     return fallback;

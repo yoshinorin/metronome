@@ -7,6 +7,7 @@ import { CodeIcon } from './components/icons/CodeIcon';
 import { InfoIcon } from './components/icons/InfoIcon';
 import { ThemeIcon } from './components/icons/ThemeIcon';
 import { LanguageSwitch } from './components/LanguageSwitch';
+import { SoundSelect } from './components/SoundSelect';
 import { TempoControl } from './components/TempoControl';
 import { TimeSignatureSelect } from './components/TimeSignature';
 import { ToggleSwitch } from './components/ToggleSwitch';
@@ -29,12 +30,14 @@ export default function App() {
     volume,
     beatLevels,
     accentEnabled,
+    sound,
     setBpm,
     setTimeSignature,
     setVolume,
     cycleBeatLevel,
     toggleBeatMute,
     setAccentEnabled,
+    setSound,
     toggle,
   } = useMetronome();
   const { theme, toggleTheme } = useTheme();
@@ -83,6 +86,7 @@ export default function App() {
           />
           <TempoControl bpm={bpm} onChange={setBpm} />
           <TimeSignatureSelect value={timeSignature} onChange={setTimeSignature} />
+          <SoundSelect value={sound} onChange={setSound} />
           <VolumeControl volume={volume} onChange={setVolume} />
           <TransportButton isPlaying={isPlaying} onToggle={toggle} />
         </>
