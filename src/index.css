@@ -13,6 +13,18 @@
   line-height: 1.5;
 }
 
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --surface-raised: #e4e7eb;
+  --text: #14161a;
+  --muted: #5b6169;
+  --accent: #0288d1;
+  --accent-dim: #d6ecf9;
+  --accent-strong: #f57c00;
+}
+
 * {
   margin: 0;
   box-sizing: border-box;

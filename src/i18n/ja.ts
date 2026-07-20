@@ -17,6 +17,8 @@ export const ja: Dictionary = {
   languageSwitch: '言語',
   about: 'このアプリについて',
   sourceCode: 'ソースコード',
+  switchToLightMode: 'ライトモードに切り替え',
+  switchToDarkMode: 'ダークモードに切り替え',
   aboutNoDataSent:
     'このアプリはブラウザ内で完結して動作します。設定・音声・利用状況などのデータを外部サーバーへ送信することはありません。',
   aboutLocalStorage:

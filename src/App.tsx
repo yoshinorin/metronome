@@ -5,6 +5,7 @@ import { BeatIndicator } from './components/BeatIndicator';
 import { HeaderIconButton } from './components/HeaderIconButton';
 import { CodeIcon } from './components/icons/CodeIcon';
 import { InfoIcon } from './components/icons/InfoIcon';
+import { ThemeIcon } from './components/icons/ThemeIcon';
 import { LanguageSwitch } from './components/LanguageSwitch';
 import { TempoControl } from './components/TempoControl';
 import { TimeSignatureSelect } from './components/TimeSignature';
@@ -12,6 +13,7 @@ import { ToggleSwitch } from './components/ToggleSwitch';
 import { TransportButton } from './components/TransportButton';
 import { VolumeControl } from './components/VolumeControl';
 import { useMetronome } from './hooks/useMetronome';
+import { useTheme } from './hooks/useTheme';
 import { useTranslation } from './i18n';
 
 const SOURCE_CODE_URL = 'https://github.com/yoshinorin/metronome';
@@ -35,6 +37,7 @@ export default function App() {
     setAccentEnabled,
     toggle,
   } = useMetronome();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <main className={styles.app}>
@@ -42,6 +45,12 @@ export default function App() {
         <header className={styles.header}>
           <h1 className={styles.title}>{t.appTitle}</h1>
           <div className={styles.headerLinks}>
+            <HeaderIconButton
+              label={theme === 'dark' ? t.switchToLightMode : t.switchToDarkMode}
+              onClick={toggleTheme}
+            >
+              <ThemeIcon theme={theme} className={styles.icon} />
+            </HeaderIconButton>
             <HeaderIconButton label={t.sourceCode} href={SOURCE_CODE_URL}>
               <CodeIcon className={styles.icon} />
             </HeaderIconButton>

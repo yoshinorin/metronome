@@ -15,6 +15,8 @@ export const en = {
   languageSwitch: 'Language',
   about: 'About',
   sourceCode: 'Source code',
+  switchToLightMode: 'Switch to light mode',
+  switchToDarkMode: 'Switch to dark mode',
   aboutNoDataSent:
     'This app runs entirely in your browser. It never sends your settings, audio, or usage data to any server.',
   aboutLocalStorage:

@@ -13,6 +13,7 @@ A metronome that runs in your browser. Built with React and the Web Audio API (v
 - UI in English and Japanese (auto-detected, switchable)
 - Responsive layout for mobile and desktop
 - Settings (tempo, time signature, volume, per-beat levels, language) persist locally across reloads
+- Dark / light theme toggle (header icon), defaults to your system preference and persists across reloads
 
 ## Development
 
