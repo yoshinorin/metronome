@@ -22,6 +22,8 @@ export interface MetronomeState {
   volume: number;
   /** Per-beat volume levels (1-5, level 1 is muted), one entry per beat. */
   beatLevels: number[];
+  /** Whether accented beats get pitch/visual emphasis. */
+  accentEnabled: boolean;
   setBpm: (bpm: number) => void;
   setTimeSignature: (timeSignature: TimeSignature) => void;
   setVolume: (volume: number) => void;
@@ -29,6 +31,7 @@ export interface MetronomeState {
   cycleBeatLevel: (beat: number) => void;
   /** Toggle the given beat between muted and its last audible level. */
   toggleBeatMute: (beat: number) => void;
+  setAccentEnabled: (enabled: boolean) => void;
   toggle: () => Promise<void>;
 }
 
@@ -43,6 +46,7 @@ export function useMetronome(): MetronomeState {
   const [currentBeat, setCurrentBeat] = useState<number | null>(null);
   const [volume, setVolumeState] = useState(initialSettings.volume);
   const [beatLevels, setBeatLevels] = useState<number[]>(initialSettings.beatLevels);
+  const [accentEnabled, setAccentEnabledState] = useState(initialSettings.accentEnabled);
   // Remembers each beat's last audible level, so the mute button can restore it.
   const lastAudibleLevelsRef = useRef<number[]>(
     initialSettings.beatLevels.map((level) => (level === BEAT_LEVEL_MIN ? BEAT_LEVEL_MAX : level)),
@@ -56,8 +60,8 @@ export function useMetronome(): MetronomeState {
 
   // Persist settings so they survive a reload.
   useEffect(() => {
-    saveMetronomeSettings({ bpm, timeSignature, volume, beatLevels });
-  }, [bpm, timeSignature, volume, beatLevels]);
+    saveMetronomeSettings({ bpm, timeSignature, volume, beatLevels, accentEnabled });
+  }, [bpm, timeSignature, volume, beatLevels, accentEnabled]);
 
   const getEngine = useCallback(() => {
     engineRef.current ??= new MetronomeEngine(setCurrentBeat);
@@ -75,9 +79,10 @@ export function useMetronome(): MetronomeState {
     engine.setTimeSignature(timeSignature);
     engine.setVolume(volume);
     engine.setBeatLevels(beatLevels);
+    engine.setAccentEnabled(accentEnabled);
     await engine.start(bpm);
     setIsPlaying(true);
-  }, [isPlaying, bpm, timeSignature, volume, beatLevels, getEngine]);
+  }, [isPlaying, bpm, timeSignature, volume, beatLevels, accentEnabled, getEngine]);
 
   const setBpm = useCallback((value: number) => {
     const next = clampBpm(value);
@@ -121,6 +126,11 @@ export function useMetronome(): MetronomeState {
     engineRef.current?.setVolume(next);
   }, []);
 
+  const setAccentEnabled = useCallback((enabled: boolean) => {
+    setAccentEnabledState(enabled);
+    engineRef.current?.setAccentEnabled(enabled);
+  }, []);
+
   // Release audio resources when the component unmounts.
   useEffect(() => {
     return () => {
@@ -136,11 +146,13 @@ export function useMetronome(): MetronomeState {
     currentBeat,
     volume,
     beatLevels,
+    accentEnabled,
     setBpm,
     setTimeSignature,
     setVolume,
     cycleBeatLevel,
     toggleBeatMute,
+    setAccentEnabled,
     toggle,
   };
 }

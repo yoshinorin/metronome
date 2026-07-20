@@ -8,6 +8,7 @@ import { InfoIcon } from './components/icons/InfoIcon';
 import { LanguageSwitch } from './components/LanguageSwitch';
 import { TempoControl } from './components/TempoControl';
 import { TimeSignatureSelect } from './components/TimeSignature';
+import { ToggleSwitch } from './components/ToggleSwitch';
 import { TransportButton } from './components/TransportButton';
 import { VolumeControl } from './components/VolumeControl';
 import { useMetronome } from './hooks/useMetronome';
@@ -25,11 +26,13 @@ export default function App() {
     currentBeat,
     volume,
     beatLevels,
+    accentEnabled,
     setBpm,
     setTimeSignature,
     setVolume,
     cycleBeatLevel,
     toggleBeatMute,
+    setAccentEnabled,
     toggle,
   } = useMetronome();
 
@@ -59,8 +62,15 @@ export default function App() {
             timeSignature={timeSignature}
             currentBeat={currentBeat}
             beatLevels={beatLevels}
+            accentEnabled={accentEnabled}
             onBeatClick={cycleBeatLevel}
             onMuteToggle={toggleBeatMute}
+          />
+          <ToggleSwitch
+            id="accent-toggle"
+            label={t.accent}
+            checked={accentEnabled}
+            onChange={setAccentEnabled}
           />
           <TempoControl bpm={bpm} onChange={setBpm} />
           <TimeSignatureSelect value={timeSignature} onChange={setTimeSignature} />

@@ -13,6 +13,7 @@ export const ja: Dictionary = {
   beat: '拍',
   mute: 'ミュート',
   unmute: 'ミュート解除',
+  accent: 'アクセント',
   languageSwitch: '言語',
   about: 'このアプリについて',
   sourceCode: 'ソースコード',

@@ -11,6 +11,7 @@ export const en = {
   beat: 'Beat',
   mute: 'Mute',
   unmute: 'Unmute',
+  accent: 'Accent',
   languageSwitch: 'Language',
   about: 'About',
   sourceCode: 'Source code',

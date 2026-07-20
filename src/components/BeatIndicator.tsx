@@ -11,6 +11,8 @@ interface Props {
   currentBeat: number | null;
   /** Per-beat volume levels (1-5, level 1 is muted). */
   beatLevels: number[];
+  /** Whether accented beats get pitch/visual emphasis. */
+  accentEnabled: boolean;
   /** Called when a beat is clicked to cycle its volume level. */
   onBeatClick: (beat: number) => void;
   /** Called when a beat's mute button is clicked. */
@@ -31,6 +33,7 @@ export function BeatIndicator({
   timeSignature,
   currentBeat,
   beatLevels,
+  accentEnabled,
   onBeatClick,
   onMuteToggle,
 }: Props) {
@@ -41,7 +44,7 @@ export function BeatIndicator({
         const level = beatLevels[beat] ?? BEAT_LEVEL_MAX;
         const muted = level === BEAT_LEVEL_MIN;
         const trackClassNames = [styles.track];
-        if (isAccentedBeat(beat, timeSignature)) {
+        if (accentEnabled && isAccentedBeat(beat, timeSignature)) {
           trackClassNames.push(styles.accent);
         }
         const fillClassNames = [styles.fill, styles[`level${level}`]];

@@ -10,6 +10,7 @@ export interface StoredMetronomeSettings {
   timeSignature: TimeSignature;
   volume: number;
   beatLevels: number[];
+  accentEnabled: boolean;
 }
 
 function isTimeSignature(value: unknown): value is TimeSignature {
@@ -28,6 +29,7 @@ function defaultSettings(): StoredMetronomeSettings {
     timeSignature,
     volume: VOLUME_DEFAULT,
     beatLevels: defaultBeatLevels(timeSignature.beats),
+    accentEnabled: true,
   };
 }
 
@@ -58,6 +60,8 @@ export function loadMetronomeSettings(): StoredMetronomeSettings {
       timeSignature,
       volume: typeof parsed.volume === 'number' ? clampVolume(parsed.volume) : fallback.volume,
       beatLevels,
+      accentEnabled:
+        typeof parsed.accentEnabled === 'boolean' ? parsed.accentEnabled : fallback.accentEnabled,
     };
   } catch {
     return fallback;

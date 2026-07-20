@@ -21,6 +21,7 @@ export class MetronomeEngine {
   private beat = 0;
   private timeSignature: TimeSignature = TIME_SIGNATURES[2];
   private beatLevels: number[] = defaultBeatLevels(TIME_SIGNATURES[2].beats);
+  private accentEnabled = true;
   private readonly onBeat: BeatCallback;
 
   constructor(onBeat: BeatCallback) {
@@ -56,6 +57,11 @@ export class MetronomeEngine {
     this.beatLevels = levels;
   }
 
+  /** Enable or disable the accent (pitch emphasis on accented beats). */
+  setAccentEnabled(enabled: boolean): void {
+    this.accentEnabled = enabled;
+  }
+
   /**
    * Change the time signature. While playing, the transport is restarted so the
    * new measure begins on beat one immediately. Re-scheduling on a running
@@ -84,9 +90,10 @@ export class MetronomeEngine {
     const transport = Tone.getTransport();
     this.eventId = transport.scheduleRepeat((time) => {
       const beat = this.beat;
-      const frequency = isAccentedBeat(beat, this.timeSignature)
-        ? ACCENT_FREQUENCY
-        : CLICK_FREQUENCY;
+      const frequency =
+        this.accentEnabled && isAccentedBeat(beat, this.timeSignature)
+          ? ACCENT_FREQUENCY
+          : CLICK_FREQUENCY;
       // A muted beat (velocity 0) stays silent but still advances the indicator.
       const velocity = beatLevelToVelocity(this.beatLevels[beat] ?? BEAT_LEVEL_MAX);
       if (velocity > 0) {
