@@ -15,6 +15,7 @@ export const ja: Dictionary = {
   unmute: 'ミュート解除',
   languageSwitch: '言語',
   about: 'このアプリについて',
+  sourceCode: 'ソースコード',
   aboutNoDataSent:
     'このアプリはブラウザ内で完結して動作します。設定・音声・利用状況などのデータを外部サーバーへ送信することはありません。',
   aboutLocalStorage:

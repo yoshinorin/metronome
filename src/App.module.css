@@ -24,6 +24,12 @@
   letter-spacing: 0.02em;
 }
 
+.headerLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
 .languageRow {
   display: flex;
   justify-content: flex-end;

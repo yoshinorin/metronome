@@ -13,6 +13,7 @@ export const en = {
   unmute: 'Unmute',
   languageSwitch: 'Language',
   about: 'About',
+  sourceCode: 'Source code',
   aboutNoDataSent:
     'This app runs entirely in your browser. It never sends your settings, audio, or usage data to any server.',
   aboutLocalStorage:

@@ -3,6 +3,7 @@ import styles from './App.module.css';
 import { AboutPage } from './components/AboutPage';
 import { BeatIndicator } from './components/BeatIndicator';
 import { HeaderIconButton } from './components/HeaderIconButton';
+import { CodeIcon } from './components/icons/CodeIcon';
 import { InfoIcon } from './components/icons/InfoIcon';
 import { LanguageSwitch } from './components/LanguageSwitch';
 import { TempoControl } from './components/TempoControl';
@@ -11,6 +12,8 @@ import { TransportButton } from './components/TransportButton';
 import { VolumeControl } from './components/VolumeControl';
 import { useMetronome } from './hooks/useMetronome';
 import { useTranslation } from './i18n';
+
+const SOURCE_CODE_URL = 'https://github.com/yoshinorin/metronome';
 
 export default function App() {
   const { t } = useTranslation();
@@ -35,9 +38,14 @@ export default function App() {
       <div className={styles.headerBlock}>
         <header className={styles.header}>
           <h1 className={styles.title}>{t.appTitle}</h1>
-          <HeaderIconButton label={t.about} onClick={() => setView('about')}>
-            <InfoIcon className={styles.icon} />
-          </HeaderIconButton>
+          <div className={styles.headerLinks}>
+            <HeaderIconButton label={t.sourceCode} href={SOURCE_CODE_URL}>
+              <CodeIcon className={styles.icon} />
+            </HeaderIconButton>
+            <HeaderIconButton label={t.about} onClick={() => setView('about')}>
+              <InfoIcon className={styles.icon} />
+            </HeaderIconButton>
+          </div>
         </header>
         <div className={styles.languageRow}>
           <LanguageSwitch />
