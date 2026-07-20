@@ -12,6 +12,7 @@ A precise metronome that runs in your browser. Built with React and the Web Audi
 - Master volume control
 - UI in English and Japanese (auto-detected, switchable)
 - Responsive layout for mobile and desktop
+- Settings (tempo, time signature, volume, per-beat levels, language) persist locally across reloads
 
 ## Development
 

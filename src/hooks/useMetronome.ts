@@ -2,8 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { defaultBeatLevels, nextBeatLevel } from '../audio/beatLevels';
 import { MetronomeEngine } from '../audio/engine';
 import { clampBpm } from '../audio/timing';
-import { clampVolume, VOLUME_DEFAULT } from '../audio/volume';
-import { BPM_DEFAULT, TIME_SIGNATURES, type TimeSignature } from '../types';
+import { clampVolume } from '../audio/volume';
+import { loadMetronomeSettings, saveMetronomeSettings } from '../storage/metronomeSettings';
+import type { TimeSignature } from '../types';
 
 export interface MetronomeState {
   bpm: number;
@@ -25,20 +26,26 @@ export interface MetronomeState {
 
 /** Bridges React state and the audio engine. The engine is created on first start. */
 export function useMetronome(): MetronomeState {
-  const [bpm, setBpmState] = useState(BPM_DEFAULT);
-  const [timeSignature, setTimeSignatureState] = useState<TimeSignature>(TIME_SIGNATURES[2]);
+  const [initialSettings] = useState(() => loadMetronomeSettings());
+  const [bpm, setBpmState] = useState(initialSettings.bpm);
+  const [timeSignature, setTimeSignatureState] = useState<TimeSignature>(
+    initialSettings.timeSignature,
+  );
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentBeat, setCurrentBeat] = useState<number | null>(null);
-  const [volume, setVolumeState] = useState(VOLUME_DEFAULT);
-  const [beatLevels, setBeatLevels] = useState<number[]>(() =>
-    defaultBeatLevels(TIME_SIGNATURES[2].beats),
-  );
+  const [volume, setVolumeState] = useState(initialSettings.volume);
+  const [beatLevels, setBeatLevels] = useState<number[]>(initialSettings.beatLevels);
   const engineRef = useRef<MetronomeEngine | null>(null);
 
   // Keep the engine in sync with the levels regardless of where they changed.
   useEffect(() => {
     engineRef.current?.setBeatLevels(beatLevels);
   }, [beatLevels]);
+
+  // Persist settings so they survive a reload.
+  useEffect(() => {
+    saveMetronomeSettings({ bpm, timeSignature, volume, beatLevels });
+  }, [bpm, timeSignature, volume, beatLevels]);
 
   const getEngine = useCallback(() => {
     engineRef.current ??= new MetronomeEngine(setCurrentBeat);
