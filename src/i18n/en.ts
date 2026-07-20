@@ -8,6 +8,7 @@ export const en = {
   timeSignature: 'Time signature',
   volume: 'Volume',
   beatIndicator: 'Beat indicator',
+  beat: 'Beat',
   languageSwitch: 'Language',
 };
 

@@ -30,7 +30,8 @@ synthetic clicks. Then drive via a Node script (global `fetch`/`WebSocket`, no p
 
 ## Flows worth driving
 
-- Start → beat dots advance (`[data-testid="beat-dot"]`, active class); Stop → no active dot.
+- Start → beat bars advance (`[data-testid="beat-bar"]`, active class); Stop → no active bar.
+- Click a beat bar to cycle its volume level (5→1→2→..., `data-level` attribute); level 1 renders as a hollow dashed bar (muted).
 - Time signature buttons (2/4…6/8) change dot count; switching while playing restarts the measure.
 - BPM: slider dispatches `input`; the numeric input `#bpm-input` commits on `focusout`
   (dispatch `FocusEvent('focusout', { bubbles: true })`) and clamps to 30–300.

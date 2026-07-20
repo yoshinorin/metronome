@@ -10,5 +10,6 @@ export const ja: Dictionary = {
   timeSignature: '拍子',
   volume: '音量',
   beatIndicator: '拍インジケーター',
+  beat: '拍',
   languageSwitch: '言語',
 };

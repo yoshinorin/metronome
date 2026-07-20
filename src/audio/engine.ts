@@ -1,5 +1,6 @@
 import * as Tone from 'tone';
 import { TIME_SIGNATURES, type TimeSignature } from '../types';
+import { BEAT_LEVEL_MAX, beatLevelToVelocity, defaultBeatLevels } from './beatLevels';
 import { ACCENT_FREQUENCY, CLICK_DURATION, CLICK_FREQUENCY, createClickSynth } from './sounds';
 import { beatSubdivision, isAccentedBeat } from './timing';
 import { volumeToDecibels } from './volume';
@@ -19,6 +20,7 @@ export class MetronomeEngine {
   private eventId: number | null = null;
   private beat = 0;
   private timeSignature: TimeSignature = TIME_SIGNATURES[2];
+  private beatLevels: number[] = defaultBeatLevels(TIME_SIGNATURES[2].beats);
   private readonly onBeat: BeatCallback;
 
   constructor(onBeat: BeatCallback) {
@@ -47,6 +49,11 @@ export class MetronomeEngine {
   /** Set the master output volume from a 0-100 percentage. */
   setVolume(percent: number): void {
     Tone.getDestination().volume.value = volumeToDecibels(percent);
+  }
+
+  /** Set the per-beat volume levels (1-5, level 1 is muted). */
+  setBeatLevels(levels: number[]): void {
+    this.beatLevels = levels;
   }
 
   /**
@@ -80,7 +87,11 @@ export class MetronomeEngine {
       const frequency = isAccentedBeat(beat, this.timeSignature)
         ? ACCENT_FREQUENCY
         : CLICK_FREQUENCY;
-      this.synth?.triggerAttackRelease(frequency, CLICK_DURATION, time);
+      // A muted beat (velocity 0) stays silent but still advances the indicator.
+      const velocity = beatLevelToVelocity(this.beatLevels[beat] ?? BEAT_LEVEL_MAX);
+      if (velocity > 0) {
+        this.synth?.triggerAttackRelease(frequency, CLICK_DURATION, time, velocity);
+      }
       Tone.getDraw().schedule(() => this.onBeat(beat), time);
       this.beat = (beat + 1) % this.timeSignature.beats;
     }, beatSubdivision(this.timeSignature));

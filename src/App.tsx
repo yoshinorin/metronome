@@ -16,9 +16,11 @@ export default function App() {
     isPlaying,
     currentBeat,
     volume,
+    beatLevels,
     setBpm,
     setTimeSignature,
     setVolume,
+    cycleBeatLevel,
     toggle,
   } = useMetronome();
 
@@ -28,7 +30,12 @@ export default function App() {
         <h1 className={styles.title}>{t.appTitle}</h1>
         <LanguageSwitch />
       </header>
-      <BeatIndicator timeSignature={timeSignature} currentBeat={currentBeat} />
+      <BeatIndicator
+        timeSignature={timeSignature}
+        currentBeat={currentBeat}
+        beatLevels={beatLevels}
+        onBeatClick={cycleBeatLevel}
+      />
       <TempoControl bpm={bpm} onChange={setBpm} />
       <TimeSignatureSelect value={timeSignature} onChange={setTimeSignature} />
       <VolumeControl volume={volume} onChange={setVolume} />
