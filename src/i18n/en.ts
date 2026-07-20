@@ -10,6 +10,12 @@ export const en = {
   beatIndicator: 'Beat indicator',
   beat: 'Beat',
   languageSwitch: 'Language',
+  about: 'About',
+  aboutNoDataSent:
+    'This app runs entirely in your browser. It never sends your settings, audio, or usage data to any server.',
+  aboutLocalStorage:
+    "Your settings (tempo, time signature, volume, per-beat levels, and language) are saved only in your browser's local storage. Clearing your browser data will reset them.",
+  back: 'Back',
 };
 
 /** Shape shared by every dictionary. */

@@ -1,5 +1,9 @@
+import { useState } from 'react';
 import styles from './App.module.css';
+import { AboutPage } from './components/AboutPage';
 import { BeatIndicator } from './components/BeatIndicator';
+import { HeaderIconButton } from './components/HeaderIconButton';
+import { InfoIcon } from './components/icons/InfoIcon';
 import { LanguageSwitch } from './components/LanguageSwitch';
 import { TempoControl } from './components/TempoControl';
 import { TimeSignatureSelect } from './components/TimeSignature';
@@ -10,6 +14,7 @@ import { useTranslation } from './i18n';
 
 export default function App() {
   const { t } = useTranslation();
+  const [view, setView] = useState<'main' | 'about'>('main');
   const {
     bpm,
     timeSignature,
@@ -26,20 +31,33 @@ export default function App() {
 
   return (
     <main className={styles.app}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>{t.appTitle}</h1>
-        <LanguageSwitch />
-      </header>
-      <BeatIndicator
-        timeSignature={timeSignature}
-        currentBeat={currentBeat}
-        beatLevels={beatLevels}
-        onBeatClick={cycleBeatLevel}
-      />
-      <TempoControl bpm={bpm} onChange={setBpm} />
-      <TimeSignatureSelect value={timeSignature} onChange={setTimeSignature} />
-      <VolumeControl volume={volume} onChange={setVolume} />
-      <TransportButton isPlaying={isPlaying} onToggle={toggle} />
+      <div className={styles.headerBlock}>
+        <header className={styles.header}>
+          <h1 className={styles.title}>{t.appTitle}</h1>
+          <HeaderIconButton label={t.about} onClick={() => setView('about')}>
+            <InfoIcon className={styles.icon} />
+          </HeaderIconButton>
+        </header>
+        <div className={styles.languageRow}>
+          <LanguageSwitch />
+        </div>
+      </div>
+      {view === 'about' ? (
+        <AboutPage onBack={() => setView('main')} />
+      ) : (
+        <>
+          <BeatIndicator
+            timeSignature={timeSignature}
+            currentBeat={currentBeat}
+            beatLevels={beatLevels}
+            onBeatClick={cycleBeatLevel}
+          />
+          <TempoControl bpm={bpm} onChange={setBpm} />
+          <TimeSignatureSelect value={timeSignature} onChange={setTimeSignature} />
+          <VolumeControl volume={volume} onChange={setVolume} />
+          <TransportButton isPlaying={isPlaying} onToggle={toggle} />
+        </>
+      )}
     </main>
   );
 }
