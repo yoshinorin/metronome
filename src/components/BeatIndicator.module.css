@@ -72,6 +72,17 @@
   border-radius: 0.25rem 0.25rem 0 0;
   background: var(--surface-raised);
   overflow: hidden;
+  transition: box-shadow 80ms ease-out;
+}
+
+/* Muted beats have a zero-height fill, so their active glow would be invisible;
+   flash the track outline itself so muted beats still blink on their turn. */
+.track.mutedActive {
+  box-shadow: 0 0 0 2px var(--accent) inset;
+}
+
+.track.accent.mutedActive {
+  box-shadow: 0 0 0 2px var(--accent-strong) inset;
 }
 
 /* Divider lines marking each volume step (25/50/75/100%) */

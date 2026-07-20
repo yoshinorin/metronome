@@ -25,9 +25,10 @@ interface Props {
  * encodes the level (1-5). Level 1 (muted) renders as zero fill height,
  * leaving the empty track visible. The current beat lights up in accent
  * color; on an accented beat that color is a distinct shade, but every
- * track is the same width — accent is color-only. A dedicated mute
- * button sits below each bar for direct access, independent of cycling
- * through the bar itself.
+ * track is the same width — accent is color-only. A muted beat still
+ * blinks on its turn via a glowing track outline, since its fill has no
+ * height to light up. A dedicated mute button sits below each bar for
+ * direct access, independent of cycling through the bar itself.
  */
 export function BeatIndicator({
   timeSignature,
@@ -43,12 +44,18 @@ export function BeatIndicator({
       {Array.from({ length: timeSignature.beats }, (_, beat) => {
         const level = beatLevels[beat] ?? BEAT_LEVEL_MAX;
         const muted = level === BEAT_LEVEL_MIN;
+        const active = beat === currentBeat;
         const trackClassNames = [styles.track];
         if (accentEnabled && isAccentedBeat(beat, timeSignature)) {
           trackClassNames.push(styles.accent);
         }
+        // The fill has zero height when muted, so its own active glow would be
+        // invisible; flash the track outline instead so muted beats still blink.
+        if (muted && active) {
+          trackClassNames.push(styles.mutedActive);
+        }
         const fillClassNames = [styles.fill, styles[`level${level}`]];
-        if (beat === currentBeat) {
+        if (active) {
           fillClassNames.push(styles.active);
         }
         return (
