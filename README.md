@@ -1,6 +1,6 @@
 # Metronome
 
-A precise metronome that runs in your browser. Built with React and the Web Audio API (via Tone.js), it will grow into a small drum machine with a step sequencer over time.
+A metronome that runs in your browser. Built with React and the Web Audio API (via Tone.js), it will grow into a small drum machine with a step sequencer over time.
 
 ## Features
 
@@ -28,7 +28,7 @@ npm run build   # type-check and build for production
 
 ## Deployment
 
-The site is deployed to GitHub Pages by GitHub Actions whenever a `v*` tag is pushed.
+The site is deployed to GitHub Pages by GitHub Actions whenever `main` is pushed.
 
 ## Using Stacks
 
