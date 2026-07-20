@@ -11,6 +11,8 @@ export const ja: Dictionary = {
   volume: '音量',
   beatIndicator: '拍インジケーター',
   beat: '拍',
+  mute: 'ミュート',
+  unmute: 'ミュート解除',
   languageSwitch: '言語',
   about: 'このアプリについて',
   aboutNoDataSent:

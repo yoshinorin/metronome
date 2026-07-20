@@ -20,3 +20,15 @@ export function beatLevelToVelocity(level: number): number {
 export function defaultBeatLevels(beats: number): number[] {
   return Array.from({ length: beats }, () => BEAT_LEVEL_MAX);
 }
+
+/**
+ * Level to switch to when a beat's dedicated mute button is pressed.
+ * Muting always goes to BEAT_LEVEL_MIN; un-muting restores lastLevel,
+ * falling back to full volume if that's not a valid level.
+ */
+export function toggleMuteLevel(currentLevel: number, lastLevel: number): number {
+  if (currentLevel !== BEAT_LEVEL_MIN) {
+    return BEAT_LEVEL_MIN;
+  }
+  return lastLevel >= BEAT_LEVEL_MIN && lastLevel <= BEAT_LEVEL_MAX ? lastLevel : BEAT_LEVEL_MAX;
+}

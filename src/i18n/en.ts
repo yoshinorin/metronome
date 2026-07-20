@@ -9,6 +9,8 @@ export const en = {
   volume: 'Volume',
   beatIndicator: 'Beat indicator',
   beat: 'Beat',
+  mute: 'Mute',
+  unmute: 'Unmute',
   languageSwitch: 'Language',
   about: 'About',
   aboutNoDataSent:

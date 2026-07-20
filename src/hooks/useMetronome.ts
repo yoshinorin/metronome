@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { defaultBeatLevels, nextBeatLevel } from '../audio/beatLevels';
+import {
+  BEAT_LEVEL_MAX,
+  BEAT_LEVEL_MIN,
+  defaultBeatLevels,
+  nextBeatLevel,
+  toggleMuteLevel,
+} from '../audio/beatLevels';
 import { MetronomeEngine } from '../audio/engine';
 import { clampBpm } from '../audio/timing';
 import { clampVolume } from '../audio/volume';
@@ -21,6 +27,8 @@ export interface MetronomeState {
   setVolume: (volume: number) => void;
   /** Advance the given beat to its next volume level (wraps 5 → 1). */
   cycleBeatLevel: (beat: number) => void;
+  /** Toggle the given beat between muted and its last audible level. */
+  toggleBeatMute: (beat: number) => void;
   toggle: () => Promise<void>;
 }
 
@@ -35,6 +43,10 @@ export function useMetronome(): MetronomeState {
   const [currentBeat, setCurrentBeat] = useState<number | null>(null);
   const [volume, setVolumeState] = useState(initialSettings.volume);
   const [beatLevels, setBeatLevels] = useState<number[]>(initialSettings.beatLevels);
+  // Remembers each beat's last audible level, so the mute button can restore it.
+  const lastAudibleLevelsRef = useRef<number[]>(
+    initialSettings.beatLevels.map((level) => (level === BEAT_LEVEL_MIN ? BEAT_LEVEL_MAX : level)),
+  );
   const engineRef = useRef<MetronomeEngine | null>(null);
 
   // Keep the engine in sync with the levels regardless of where they changed.
@@ -76,14 +88,31 @@ export function useMetronome(): MetronomeState {
   const setTimeSignature = useCallback((next: TimeSignature) => {
     setTimeSignatureState(next);
     // A new meter has a different number of beats; start over at full volume.
-    setBeatLevels(defaultBeatLevels(next.beats));
+    const fresh = defaultBeatLevels(next.beats);
+    setBeatLevels(fresh);
+    lastAudibleLevelsRef.current = [...fresh];
     engineRef.current?.setTimeSignature(next);
   }, []);
 
   const cycleBeatLevel = useCallback((beat: number) => {
-    setBeatLevels((prev) =>
-      prev.map((level, index) => (index === beat ? nextBeatLevel(level) : level)),
-    );
+    setBeatLevels((prev) => {
+      const next = nextBeatLevel(prev[beat]);
+      if (next !== BEAT_LEVEL_MIN) {
+        lastAudibleLevelsRef.current[beat] = next;
+      }
+      return prev.map((level, index) => (index === beat ? next : level));
+    });
+  }, []);
+
+  const toggleBeatMute = useCallback((beat: number) => {
+    setBeatLevels((prev) => {
+      const current = prev[beat];
+      if (current !== BEAT_LEVEL_MIN) {
+        lastAudibleLevelsRef.current[beat] = current;
+      }
+      const next = toggleMuteLevel(current, lastAudibleLevelsRef.current[beat] ?? BEAT_LEVEL_MAX);
+      return prev.map((level, index) => (index === beat ? next : level));
+    });
   }, []);
 
   const setVolume = useCallback((value: number) => {
@@ -111,6 +140,7 @@ export function useMetronome(): MetronomeState {
     setTimeSignature,
     setVolume,
     cycleBeatLevel,
+    toggleBeatMute,
     toggle,
   };
 }

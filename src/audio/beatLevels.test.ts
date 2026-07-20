@@ -4,6 +4,7 @@ import {
   beatLevelToVelocity,
   defaultBeatLevels,
   nextBeatLevel,
+  toggleMuteLevel,
 } from './beatLevels';
 
 describe('nextBeatLevel', () => {
@@ -39,5 +40,21 @@ describe('defaultBeatLevels', () => {
   it('creates one full-volume level per beat', () => {
     expect(defaultBeatLevels(4)).toEqual([5, 5, 5, 5]);
     expect(defaultBeatLevels(6)).toHaveLength(6);
+  });
+});
+
+describe('toggleMuteLevel', () => {
+  it('mutes an audible beat regardless of the remembered level', () => {
+    expect(toggleMuteLevel(3, 3)).toBe(BEAT_LEVEL_MIN);
+    expect(toggleMuteLevel(BEAT_LEVEL_MAX, 2)).toBe(BEAT_LEVEL_MIN);
+  });
+
+  it('restores the remembered level when un-muting', () => {
+    expect(toggleMuteLevel(BEAT_LEVEL_MIN, 4)).toBe(4);
+  });
+
+  it('falls back to full volume when the remembered level is invalid', () => {
+    expect(toggleMuteLevel(BEAT_LEVEL_MIN, 0)).toBe(BEAT_LEVEL_MAX);
+    expect(toggleMuteLevel(BEAT_LEVEL_MIN, 99)).toBe(BEAT_LEVEL_MAX);
   });
 });

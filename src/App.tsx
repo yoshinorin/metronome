@@ -26,6 +26,7 @@ export default function App() {
     setTimeSignature,
     setVolume,
     cycleBeatLevel,
+    toggleBeatMute,
     toggle,
   } = useMetronome();
 
@@ -51,6 +52,7 @@ export default function App() {
             currentBeat={currentBeat}
             beatLevels={beatLevels}
             onBeatClick={cycleBeatLevel}
+            onMuteToggle={toggleBeatMute}
           />
           <TempoControl bpm={bpm} onChange={setBpm} />
           <TimeSignatureSelect value={timeSignature} onChange={setTimeSignature} />
