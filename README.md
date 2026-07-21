@@ -15,6 +15,7 @@ A metronome that runs in your browser. Built with React and the Web Audio API (v
 - Responsive layout for mobile and desktop
 - Settings (tempo, time signature, volume, per-beat levels, language) persist locally across reloads
 - Dark / light theme toggle (header icon), defaults to your system preference and persists across reloads
+- Installable as a PWA with offline support, with an in-app install button (Chromium browsers only — Safari has no `beforeinstallprompt`, so it's not shown there; use Share → Add to Home Screen instead)
 
 ## Development
 
@@ -43,3 +44,4 @@ The site is deployed to GitHub Pages by GitHub Actions whenever `main` is pushed
 | i18n | Hand-rolled, type-safe dictionaries (en / ja) |
 | Lint / format | Biome |
 | Tests | Vitest |
+| PWA | vite-plugin-pwa (Workbox) |

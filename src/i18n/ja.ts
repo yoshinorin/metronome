@@ -24,9 +24,27 @@ export const ja: Dictionary = {
   sourceCode: 'ソースコード',
   switchToLightMode: 'ライトモードに切り替え',
   switchToDarkMode: 'ダークモードに切り替え',
+  installApp: 'アプリをインストール',
+  aboutSectionApp: 'アプリの説明',
+  aboutSectionSettings: '設定',
+  aboutSectionInstall: 'インストール',
+  aboutSectionUpdate: '更新手順',
+  aboutSectionUninstall: 'アンインストール',
   aboutNoDataSent:
     'このアプリはブラウザ内で完結して動作します。設定・音声・利用状況などのデータを外部サーバーへ送信することはありません。',
   aboutLocalStorage:
     '設定(テンポ・拍子・音量・拍ごとの音量・言語)はブラウザのローカルストレージにのみ保存されます。ブラウザのデータを消去すると設定もリセットされます。',
+  aboutOffline:
+    'このアプリは PWA(Progressive Web App)です。インストールすると、必要なファイルが端末に保存されるため、オフラインでも動作し続けます。',
+  aboutSafariInstall:
+    'Safari(iOS/iPadOS)では、ブラウザがこの機能に対応していないためインストールボタンは表示されません。共有ボタンから「ホーム画面に追加」を選んでください。',
+  aboutUpdateInfo:
+    '更新は自動で行われます。アプリを開くたびに新しいバージョンがないか確認し、バックグラウンドで自動的に更新されます。手動での操作は不要です。最新の内容が反映されない場合は、アプリを一度閉じて開き直す(またはページを再読み込みする)と反映されます。',
+  aboutUninstallDesktop:
+    'Chrome / Edge(デスクトップ): chrome://apps(または edge://apps)を開いてアプリを右クリックし「アンインストール」を選択するか、タスクバー/Dock のアイコンを右クリックしてください。',
+  aboutUninstallAndroid:
+    'Android: ホーム画面のアプリアイコンを長押しして「アンインストール」を選択してください。',
+  aboutUninstallIOS:
+    'iOS / iPadOS: ホーム画面のアイコンを長押しして「App を削除」を選択してください。',
   back: '戻る',
 };

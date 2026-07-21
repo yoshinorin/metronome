@@ -5,6 +5,7 @@ import { BeatIndicator } from './components/BeatIndicator';
 import { HeaderIconButton } from './components/HeaderIconButton';
 import { CodeIcon } from './components/icons/CodeIcon';
 import { InfoIcon } from './components/icons/InfoIcon';
+import { InstallIcon } from './components/icons/InstallIcon';
 import { ThemeIcon } from './components/icons/ThemeIcon';
 import { LanguageSwitch } from './components/LanguageSwitch';
 import { SoundSelect } from './components/SoundSelect';
@@ -13,6 +14,7 @@ import { TimeSignatureSelect } from './components/TimeSignature';
 import { ToggleSwitch } from './components/ToggleSwitch';
 import { TransportButton } from './components/TransportButton';
 import { VolumeControl } from './components/VolumeControl';
+import { useInstallPrompt } from './hooks/useInstallPrompt';
 import { useMetronome } from './hooks/useMetronome';
 import { useTheme } from './hooks/useTheme';
 import { useTranslation } from './i18n';
@@ -41,6 +43,7 @@ export default function App() {
     toggle,
   } = useMetronome();
   const { theme, toggleTheme } = useTheme();
+  const { canInstall, promptInstall } = useInstallPrompt();
 
   return (
     <main className={styles.app}>
@@ -60,6 +63,11 @@ export default function App() {
             <HeaderIconButton label={t.about} onClick={() => setView('about')}>
               <InfoIcon className={styles.icon} />
             </HeaderIconButton>
+            {canInstall && (
+              <HeaderIconButton label={t.installApp} onClick={promptInstall}>
+                <InstallIcon className={styles.icon} />
+              </HeaderIconButton>
+            )}
           </div>
         </header>
         <div className={styles.languageRow}>
