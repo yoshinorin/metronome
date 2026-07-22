@@ -1,6 +1,8 @@
 # Metronome
 
-A metronome that runs in your browser. Built with React and the Web Audio API (via Tone.js), it will grow into a small drum machine with a step sequencer over time.
+> **[Open the app in your browser](https://yoshinorin.github.io/metronome/)**
+> 
+> A metronome that runs in your browser. Built with React and the Web Audio API (via Tone.js), it will grow into a small drum machine with a step sequencer over time.
 
 ## Features
 
