@@ -5,6 +5,17 @@
   min-height: 5.5rem;
 }
 
+/* Hugs exactly the width of its beat columns (unlike .row, which may be
+   wider and centers this group), so the tick overlay's percentages line
+   up with real column boundaries regardless of how .row centers things.
+   The gap here must match COLUMN_GAP_REM in BeatIndicator.tsx. */
+.columns {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
 .column {
   display: flex;
   flex-direction: column;
@@ -28,6 +39,34 @@
 .beat:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: -2px;
+}
+
+/* Covers the full .columns width so each tick's left% is a real fraction
+   of the whole measure, letting ticks land visually between bars instead
+   of being confined under whichever beat they follow. */
+.subTickOverlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.subTick {
+  position: absolute;
+  /* Low in the track band (see .beat/.track geometry above), near the
+     bars' shared baseline, so ticks read as sitting alongside the bars
+     rather than floating above short ones. */
+  top: 2.5rem;
+  width: 0.3125rem;
+  height: 0.3125rem;
+  border-radius: 50%;
+  background: var(--muted);
+  transform: translate(-50%, -50%);
+  transition: background 80ms ease-out;
+}
+
+.subTickActive {
+  background: var(--accent);
+  box-shadow: 0 0 0.25rem var(--accent);
 }
 
 .muteButton {

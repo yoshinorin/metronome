@@ -9,11 +9,19 @@ import {
   DEFAULT_SOUND_ID,
   type SoundId,
 } from './sounds';
+import {
+  DEFAULT_SUBDIVISION,
+  GHOST_TICK_VELOCITY_RATIO,
+  type SubdivisionCount,
+} from './subdivision';
 import { beatSubdivision, isAccentedBeat } from './timing';
 import { volumeToDecibels } from './volume';
 
 /** Called on every beat, on the UI thread, with the zero-indexed beat number. */
 export type BeatCallback = (beat: number) => void;
+
+/** Called on every subdivision tick after the downbeat, with its zero-indexed position within the beat. */
+export type SubTickCallback = (subTick: number) => void;
 
 /**
  * Thin wrapper around the Tone.js Transport.
@@ -30,10 +38,13 @@ export class MetronomeEngine {
   private beatLevels: number[] = defaultBeatLevels(TIME_SIGNATURES[2].beats);
   private accentEnabled = true;
   private soundId: SoundId = DEFAULT_SOUND_ID;
+  private subdivision: SubdivisionCount = DEFAULT_SUBDIVISION;
   private readonly onBeat: BeatCallback;
+  private readonly onSubTick: SubTickCallback;
 
-  constructor(onBeat: BeatCallback) {
+  constructor(onBeat: BeatCallback, onSubTick: SubTickCallback) {
     this.onBeat = onBeat;
+    this.onSubTick = onSubTick;
   }
 
   /** Start playback. Must be called from a user gesture (browser autoplay policy). */
@@ -79,6 +90,11 @@ export class MetronomeEngine {
     }
   }
 
+  /** Set how many equal clicks each beat is split into (1 = no subdivision). */
+  setSubdivision(count: SubdivisionCount): void {
+    this.subdivision = count;
+  }
+
   /**
    * Change the time signature. While playing, the transport is restarted so the
    * new measure begins on beat one immediately. Re-scheduling on a running
@@ -113,10 +129,28 @@ export class MetronomeEngine {
           : CLICK_FREQUENCY;
       // A muted beat (velocity 0) stays silent but still advances the indicator.
       const velocity = beatLevelToVelocity(this.beatLevels[beat] ?? BEAT_LEVEL_MAX);
-      if (velocity > 0) {
-        this.synth?.triggerAttackRelease(frequency, CLICK_DURATION, time, velocity);
+
+      const subdivision = this.subdivision;
+      const beatDuration = Tone.Time(beatSubdivision(this.timeSignature)).toSeconds();
+      const tickInterval = beatDuration / subdivision;
+
+      for (let sub = 0; sub < subdivision; sub++) {
+        const tickTime = time + sub * tickInterval;
+        // Only the downbeat (sub 0) carries the beat's pitch/accent; later
+        // ticks are quieter "ghost" clicks at the plain pitch, silenced
+        // along with the rest of the beat when it's muted.
+        const tickFrequency = sub === 0 ? frequency : CLICK_FREQUENCY;
+        const tickVelocity = sub === 0 ? velocity : velocity * GHOST_TICK_VELOCITY_RATIO;
+        if (tickVelocity > 0) {
+          this.synth?.triggerAttackRelease(tickFrequency, CLICK_DURATION, tickTime, tickVelocity);
+        }
+        if (sub === 0) {
+          Tone.getDraw().schedule(() => this.onBeat(beat), tickTime);
+        } else {
+          Tone.getDraw().schedule(() => this.onSubTick(sub), tickTime);
+        }
       }
-      Tone.getDraw().schedule(() => this.onBeat(beat), time);
+
       this.beat = (beat + 1) % this.timeSignature.beats;
     }, beatSubdivision(this.timeSignature));
   }

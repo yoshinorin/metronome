@@ -8,6 +8,7 @@ import {
 } from '../audio/beatLevels';
 import { MetronomeEngine } from '../audio/engine';
 import type { SoundId } from '../audio/sounds';
+import type { SubdivisionCount } from '../audio/subdivision';
 import { clampBpm } from '../audio/timing';
 import { clampVolume } from '../audio/volume';
 import { loadMetronomeSettings, saveMetronomeSettings } from '../storage/metronomeSettings';
@@ -19,6 +20,8 @@ export interface MetronomeState {
   isPlaying: boolean;
   /** Zero-indexed current beat, or null while stopped. */
   currentBeat: number | null;
+  /** Zero-indexed current subdivision tick within the current beat, or null while stopped. */
+  currentSubTick: number | null;
   /** Master volume, 0-100. */
   volume: number;
   /** Per-beat volume levels (1-5, level 1 is muted), one entry per beat. */
@@ -27,6 +30,8 @@ export interface MetronomeState {
   accentEnabled: boolean;
   /** Which preset click timbre is active. */
   sound: SoundId;
+  /** How many equal clicks each beat is split into (1 = no subdivision). */
+  subdivision: SubdivisionCount;
   setBpm: (bpm: number) => void;
   setTimeSignature: (timeSignature: TimeSignature) => void;
   setVolume: (volume: number) => void;
@@ -36,6 +41,7 @@ export interface MetronomeState {
   toggleBeatMute: (beat: number) => void;
   setAccentEnabled: (enabled: boolean) => void;
   setSound: (soundId: SoundId) => void;
+  setSubdivision: (count: SubdivisionCount) => void;
   toggle: () => Promise<void>;
 }
 
@@ -48,10 +54,14 @@ export function useMetronome(): MetronomeState {
   );
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentBeat, setCurrentBeat] = useState<number | null>(null);
+  const [currentSubTick, setCurrentSubTick] = useState<number | null>(null);
   const [volume, setVolumeState] = useState(initialSettings.volume);
   const [beatLevels, setBeatLevels] = useState<number[]>(initialSettings.beatLevels);
   const [accentEnabled, setAccentEnabledState] = useState(initialSettings.accentEnabled);
   const [sound, setSoundState] = useState<SoundId>(initialSettings.sound);
+  const [subdivision, setSubdivisionState] = useState<SubdivisionCount>(
+    initialSettings.subdivision,
+  );
   // Remembers each beat's last audible level, so the mute button can restore it.
   const lastAudibleLevelsRef = useRef<number[]>(
     initialSettings.beatLevels.map((level) => (level === BEAT_LEVEL_MIN ? BEAT_LEVEL_MAX : level)),
@@ -65,11 +75,22 @@ export function useMetronome(): MetronomeState {
 
   // Persist settings so they survive a reload.
   useEffect(() => {
-    saveMetronomeSettings({ bpm, timeSignature, volume, beatLevels, accentEnabled, sound });
-  }, [bpm, timeSignature, volume, beatLevels, accentEnabled, sound]);
+    saveMetronomeSettings({
+      bpm,
+      timeSignature,
+      volume,
+      beatLevels,
+      accentEnabled,
+      sound,
+      subdivision,
+    });
+  }, [bpm, timeSignature, volume, beatLevels, accentEnabled, sound, subdivision]);
 
   const getEngine = useCallback(() => {
-    engineRef.current ??= new MetronomeEngine(setCurrentBeat);
+    engineRef.current ??= new MetronomeEngine((beat) => {
+      setCurrentBeat(beat);
+      setCurrentSubTick(0);
+    }, setCurrentSubTick);
     return engineRef.current;
   }, []);
 
@@ -78,6 +99,7 @@ export function useMetronome(): MetronomeState {
       getEngine().stop();
       setIsPlaying(false);
       setCurrentBeat(null);
+      setCurrentSubTick(null);
       return;
     }
     const engine = getEngine();
@@ -86,9 +108,20 @@ export function useMetronome(): MetronomeState {
     engine.setBeatLevels(beatLevels);
     engine.setAccentEnabled(accentEnabled);
     engine.setSound(sound);
+    engine.setSubdivision(subdivision);
     await engine.start(bpm);
     setIsPlaying(true);
-  }, [isPlaying, bpm, timeSignature, volume, beatLevels, accentEnabled, sound, getEngine]);
+  }, [
+    isPlaying,
+    bpm,
+    timeSignature,
+    volume,
+    beatLevels,
+    accentEnabled,
+    sound,
+    subdivision,
+    getEngine,
+  ]);
 
   const setBpm = useCallback((value: number) => {
     const next = clampBpm(value);
@@ -142,6 +175,11 @@ export function useMetronome(): MetronomeState {
     engineRef.current?.setSound(soundId);
   }, []);
 
+  const setSubdivision = useCallback((count: SubdivisionCount) => {
+    setSubdivisionState(count);
+    engineRef.current?.setSubdivision(count);
+  }, []);
+
   // Release audio resources when the component unmounts.
   useEffect(() => {
     return () => {
@@ -155,10 +193,12 @@ export function useMetronome(): MetronomeState {
     timeSignature,
     isPlaying,
     currentBeat,
+    currentSubTick,
     volume,
     beatLevels,
     accentEnabled,
     sound,
+    subdivision,
     setBpm,
     setTimeSignature,
     setVolume,
@@ -166,6 +206,7 @@ export function useMetronome(): MetronomeState {
     toggleBeatMute,
     setAccentEnabled,
     setSound,
+    setSubdivision,
     toggle,
   };
 }

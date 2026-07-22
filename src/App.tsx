@@ -9,6 +9,7 @@ import { InstallIcon } from './components/icons/InstallIcon';
 import { ThemeIcon } from './components/icons/ThemeIcon';
 import { LanguageSwitch } from './components/LanguageSwitch';
 import { SoundSelect } from './components/SoundSelect';
+import { SubdivisionSelect } from './components/SubdivisionSelect';
 import { TempoControl } from './components/TempoControl';
 import { TimeSignatureSelect } from './components/TimeSignature';
 import { ToggleSwitch } from './components/ToggleSwitch';
@@ -29,10 +30,12 @@ export default function App() {
     timeSignature,
     isPlaying,
     currentBeat,
+    currentSubTick,
     volume,
     beatLevels,
     accentEnabled,
     sound,
+    subdivision,
     setBpm,
     setTimeSignature,
     setVolume,
@@ -40,6 +43,7 @@ export default function App() {
     toggleBeatMute,
     setAccentEnabled,
     setSound,
+    setSubdivision,
     toggle,
   } = useMetronome();
   const { theme, toggleTheme } = useTheme();
@@ -81,8 +85,10 @@ export default function App() {
           <BeatIndicator
             timeSignature={timeSignature}
             currentBeat={currentBeat}
+            currentSubTick={currentSubTick}
             beatLevels={beatLevels}
             accentEnabled={accentEnabled}
+            subdivision={subdivision}
             onBeatClick={cycleBeatLevel}
             onMuteToggle={toggleBeatMute}
           />
@@ -94,6 +100,11 @@ export default function App() {
           />
           <TempoControl bpm={bpm} onChange={setBpm} />
           <TimeSignatureSelect value={timeSignature} onChange={setTimeSignature} />
+          <SubdivisionSelect
+            value={subdivision}
+            timeSignature={timeSignature}
+            onChange={setSubdivision}
+          />
           <SoundSelect value={sound} onChange={setSound} />
           <VolumeControl volume={volume} onChange={setVolume} />
           <TransportButton isPlaying={isPlaying} onToggle={toggle} />

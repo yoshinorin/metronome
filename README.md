@@ -8,6 +8,7 @@ A metronome that runs in your browser. Built with React and the Web Audio API (v
 - Tempo control from 1 to 999 BPM (slider + numeric input)
 - Time signatures: 2/4, 3/4, 4/4, 6/8 (compound-meter accents in 6/8)
 - Four click sound presets (Click, Beep, Wood, Bell), switchable at any time including during playback
+- Subdivision: split each beat into quarter/eighth/triplet/sixteenth notes, with proportionally positioned dots showing the finer clicks (available note values adjust to the time signature)
 - Accented first beat and visual beat indicator, toggleable with a switch
 - Per-beat volume: click a beat bar to cycle its level (1-5, level 1 mutes it), or use the dedicated mute button below each bar to toggle it instantly (remembers the level to restore)
 - Master volume control
