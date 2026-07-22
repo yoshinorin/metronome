@@ -1,5 +1,5 @@
-import { BPM_MAX, BPM_MIN, type TimeSignature } from '../types';
-import { accentedBeats, beatSubdivision, clampBpm, isAccentedBeat } from './timing';
+import { accentedBeats, beatSubdivision, clampBpm, isAccentedBeat } from '../../src/audio/timing';
+import { BPM_MAX, BPM_MIN, type TimeSignature } from '../../src/types';
 
 const fourFour: TimeSignature = { beats: 4, noteValue: 4 };
 const threeFour: TimeSignature = { beats: 3, noteValue: 4 };

@@ -1,4 +1,4 @@
-import { detectLanguage } from './index';
+import { detectLanguage } from '../../src/i18n';
 
 describe('detectLanguage', () => {
   it('detects Japanese from ja and ja-JP', () => {

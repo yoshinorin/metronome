@@ -5,7 +5,7 @@ import {
   defaultBeatLevels,
   nextBeatLevel,
   toggleMuteLevel,
-} from './beatLevels';
+} from '../../src/audio/beatLevels';
 
 describe('nextBeatLevel', () => {
   it('cycles 1 through 5 and wraps back to 1', () => {

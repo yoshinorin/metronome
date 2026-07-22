@@ -1,4 +1,10 @@
-import { clampVolume, VOLUME_DEFAULT, VOLUME_MAX, VOLUME_MIN, volumeToDecibels } from './volume';
+import {
+  clampVolume,
+  VOLUME_DEFAULT,
+  VOLUME_MAX,
+  VOLUME_MIN,
+  volumeToDecibels,
+} from '../../src/audio/volume';
 
 describe('clampVolume', () => {
   it('keeps values inside the range unchanged', () => {

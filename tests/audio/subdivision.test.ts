@@ -1,4 +1,4 @@
-import { isSubdivisionCount, subdivisionLabelKey } from './subdivision';
+import { isSubdivisionCount, subdivisionLabelKey } from '../../src/audio/subdivision';
 
 describe('isSubdivisionCount', () => {
   it('accepts 1 through 4', () => {
