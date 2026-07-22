@@ -30,12 +30,17 @@ export const en = {
   switchToDarkMode: 'Switch to dark mode',
   installApp: 'Install app',
   aboutSectionApp: 'About this app',
+  aboutSectionDisclaimer: 'Disclaimer',
   aboutSectionSettings: 'Settings',
   aboutSectionInstall: 'Install',
   aboutSectionUpdate: 'Updates',
   aboutSectionUninstall: 'Uninstall',
   aboutNoDataSent:
     'This app runs entirely in your browser. It never sends your settings, audio, or usage data to any server.',
+  aboutDisclaimerNoLiability:
+    'The developer accepts no responsibility for any outcome resulting from your use of this app.',
+  aboutDisclaimerSecurityRisk:
+    'Security is taken seriously, but the possibility of a security risk — for example arising from a compromise of the source code — can never be fully ruled out.',
   aboutLocalStorage:
     "Your settings (tempo, time signature, volume, per-beat levels, and language) are saved only in your browser's local storage. Clearing your browser data will reset them.",
   aboutOffline:

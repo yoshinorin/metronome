@@ -5,7 +5,7 @@ interface Props {
   onBack: () => void;
 }
 
-/** Explains the app: privacy model, settings storage, and PWA install/update/uninstall. */
+/** Explains the app: privacy model, disclaimer, settings storage, and PWA install/update/uninstall. */
 export function AboutPage({ onBack }: Props) {
   const { t } = useTranslation();
   return (
@@ -17,6 +17,14 @@ export function AboutPage({ onBack }: Props) {
       <section className={styles.section}>
         <h2 className={styles.heading}>{t.aboutSectionApp}</h2>
         <p className={styles.paragraph}>{t.aboutNoDataSent}</p>
+      </section>
+
+      <section className={styles.section}>
+        <h2 className={styles.heading}>{t.aboutSectionDisclaimer}</h2>
+        <ul className={styles.list}>
+          <li>{t.aboutDisclaimerNoLiability}</li>
+          <li>{t.aboutDisclaimerSecurityRisk}</li>
+        </ul>
       </section>
 
       <section className={styles.section}>

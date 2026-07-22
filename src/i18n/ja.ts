@@ -32,12 +32,17 @@ export const ja: Dictionary = {
   switchToDarkMode: 'ダークモードに切り替え',
   installApp: 'アプリをインストール',
   aboutSectionApp: 'アプリの説明',
+  aboutSectionDisclaimer: '免責事項',
   aboutSectionSettings: '設定',
   aboutSectionInstall: 'インストール',
   aboutSectionUpdate: '更新手順',
   aboutSectionUninstall: 'アンインストール',
   aboutNoDataSent:
     'このアプリはブラウザ内で完結して動作します。設定・音声・利用状況などのデータを外部サーバーへ送信することはありません。',
+  aboutDisclaimerNoLiability:
+    '本アプリの利用によって生じた結果について、開発者は一切の責任を負いません。',
+  aboutDisclaimerSecurityRisk:
+    'セキュリティには細心の注意を払っていますが、ソースコードの侵害などにより、セキュリティ上のリスクが生じる可能性を完全に否定することはできません。',
   aboutLocalStorage:
     '設定(テンポ・拍子・音量・拍ごとの音量・言語)はブラウザのローカルストレージにのみ保存されます。ブラウザのデータを消去すると設定もリセットされます。',
   aboutOffline:
